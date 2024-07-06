@@ -1,5 +1,4 @@
-const { UserModel } = require('../models');
-const { userUpdatedDataByID, userExists, createToken } = require('../services');
+const { createToken, updateUserDataByID, getExistsUser } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 const { userRolesEnum } = require('../constants');
 
@@ -9,7 +8,7 @@ const login = async (req, res) => {
     const { employeeID, password } = req.body;
 
     // find user by employeeID & password
-    const { _id: id, role } = await userExists(employeeID, password);
+    const { _id: id, role } = await getExistsUser(employeeID, password, '_id role');
 
     if (!id) {
         throw httpError(401, 'Employee ID or password is wrong');
@@ -24,7 +23,7 @@ const login = async (req, res) => {
     const refToken = createToken(id, KEY_REFRESH_TOKEN, '9h');
 
     // Update user data
-    const { name, phone, accessToken, refreshToken } = await userUpdatedDataByID(id, accToken, refToken);
+    const { name, phone, accessToken, refreshToken } = await updateUserDataByID(id, accToken, refToken);
 
     res.status(200).json({
         user: { name, phone },
@@ -35,11 +34,8 @@ const login = async (req, res) => {
     });
 };
 
-const current = async (req, res) => {
-    const { employeeID } = req.body;
-    const user = await UserModel.exists({ employeeID });
-
+const currentUser = ({ user }, res) => {
     res.status(200).json({ user });
 };
 
-module.exports = { login: ctrlWrapper(login), current: ctrlWrapper(current) };
+module.exports = { login: ctrlWrapper(login), currentUser: ctrlWrapper(currentUser) };

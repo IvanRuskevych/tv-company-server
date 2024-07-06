@@ -1,4 +1,4 @@
-const { userUpdatedDataByID, userExists } = require('./auth.service');
-const { createToken } = require('./jwt.service');
+const { updateUserDataByID, getExistsUser, getUserById } = require('./auth.service');
+const { createToken, verifyToken } = require('./jwt.service');
 
-module.exports = { userUpdatedDataByID, userExists, createToken };
+module.exports = { updateUserDataByID, getExistsUser, getUserById, createToken, verifyToken };
