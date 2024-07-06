@@ -20,6 +20,6 @@ module.exports.authenticate = async (req, res, next) => {
 
         next();
     } catch (err) {
-        next(httpError(401, 'Not authorized catch'));
+        next(httpError(401, 'Not authorized'));
     }
 };
