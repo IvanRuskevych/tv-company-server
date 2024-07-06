@@ -1,3 +1,4 @@
 const { userRolesEnum } = require('./enum');
+const { regex } = require('./regex');
 
-module.exports = { userRolesEnum };
+module.exports = { userRolesEnum, regex };

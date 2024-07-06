@@ -14,7 +14,7 @@ module.exports = {
         'class-methods-use-this': 'off',
         'array-bracket-newline': 'off',
         'array-element-newline': 'off',
-        'arrow-body-style': 'error',
+        'arrow-body-style': 'warn',
         'block-scoped-var': 'error',
         complexity: 'error',
         'constructor-super': 'error',
