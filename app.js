@@ -12,12 +12,16 @@ dotenv.config({
 
 const app = express();
 const formatLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const { authRouter } = require('./routes');
 
 app.use(logger(formatLogger));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(cors());
+
+// Routes
+app.use('/auth', authRouter);
 
 // Error settings
 app.use((req, res) => {
