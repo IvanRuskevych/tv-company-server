@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const { userRolesEnum } = require('../constants');
 const { handleMongooseError } = require('../utils');
+const { userRolesEnum } = require('../constants');
 
 const userSchema = new Schema(
     {

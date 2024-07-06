@@ -1,3 +1,3 @@
-const { login, current } = require('./auth');
+const { login, currentUser } = require('./auth');
 
-module.exports = { login, current };
+module.exports = { login, currentUser };
