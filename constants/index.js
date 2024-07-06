@@ -1,3 +1,3 @@
-const { userRolesEnum, secretKey } = require('./enum');
+const { userRolesEnum } = require('./enum');
 
-module.exports = { userRolesEnum, secretKey };
+module.exports = { userRolesEnum };

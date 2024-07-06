@@ -1,7 +1,9 @@
 const { UserModel } = require('../models');
 const { userUpdatedDataByID, userExists, createToken } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
-const { userRolesEnum, secretKey } = require('../constants');
+const { userRolesEnum } = require('../constants');
+
+const { KEY_ACCESS_TOKEN, KEY_REFRESH_TOKEN } = process.env;
 
 const login = async (req, res) => {
     const { employeeID, password } = req.body;
@@ -18,8 +20,8 @@ const login = async (req, res) => {
     }
 
     // create tokens
-    const accToken = createToken(id, secretKey.ACCESS, '1h');
-    const refToken = createToken(id, secretKey.REFRESH, '9h');
+    const accToken = createToken(id, KEY_ACCESS_TOKEN, '1h');
+    const refToken = createToken(id, KEY_REFRESH_TOKEN, '9h');
 
     // Update user data
     const { name, phone, accessToken, refreshToken } = await userUpdatedDataByID(id, accToken, refToken);
