@@ -12,4 +12,4 @@ const httpError = (status, message = errorMessageList[status]) => {
     return err;
 };
 
-module.exports = httpError;
+module.exports = { httpError };
