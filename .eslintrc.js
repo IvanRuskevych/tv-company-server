@@ -33,7 +33,7 @@ module.exports = {
         indent: ['error', 4, { SwitchCase: 1 }],
         'linebreak-style': 'off',
         'max-classes-per-file': 'off',
-        'newline-per-chained-call': 'error',
+        'newline-per-chained-call': 'warn',
         'new-parens': 'error',
         'no-alert': 'error',
         'no-duplicate-imports': 'error',

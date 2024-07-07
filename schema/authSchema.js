@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
 module.exports.loginSchema = Joi.object()
-    .optional({ abortEarly: false })
     .keys({
         employeeID: Joi.string().required().messages({
             'any.required': 'Employee ID is required',
@@ -11,4 +10,8 @@ module.exports.loginSchema = Joi.object()
             'any.required': 'Password is required',
             'string.empty': "Field 'Password' cannot be empty",
         }),
+    })
+    .required()
+    .messages({
+        'any.required': 'Credentials object is required',
     });
