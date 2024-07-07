@@ -9,11 +9,7 @@ const createShow = async (req, res) => {
   const isShowExist = await getExistsDoc(ShowModel, { name });
   if (isShowExist) throw httpError(409, 'Show already exists.');
 
-  const newShow = await ShowModel.create({
-    name,
-    rating,
-    pricePerCommercial,
-  });
+  const newShow = await ShowModel.create({ name, rating, pricePerCommercial });
 
   res.status(201).json(newShow);
 };
