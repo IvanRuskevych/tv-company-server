@@ -6,7 +6,6 @@ const { loginSchema } = require('../schema');
 
 const router = Router();
 
-router.post('/login', validateBody(loginSchema), login);
-router.get('/current', authenticate, currentUser);
+router.route('/').post(validateBody(loginSchema), login).get(authenticate, currentUser);
 
 module.exports = router;
