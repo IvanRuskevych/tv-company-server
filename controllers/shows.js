@@ -1,13 +1,13 @@
 const { ShowModel } = require('../models');
-const { isShowExist } = require('../services');
+const { getExistsDoc, getAllDoc } = require('../services');
 const { ctrlWrapper, httpError } = require('../utils');
 
 // Create new show
 const createShow = async (req, res) => {
     const { name, rating, pricePerCommercial } = req.body;
 
-    const isExist = await isShowExist(ShowModel, { name });
-    if (isExist) throw httpError(409, 'Show already exists');
+    const isShowExist = await getExistsDoc(ShowModel, { name });
+    if (isShowExist) throw httpError(409, 'Show already exists');
 
     const result = await ShowModel.create({ name, rating, pricePerCommercial });
 
@@ -16,7 +16,10 @@ const createShow = async (req, res) => {
 
 // Get all show
 const getAllShow = async (req, res) => {
-    const allShows = await ShowModel.find();
+    const allShows = await getAllDoc(ShowModel);
+
+    if (!allShows.length) res.status(200).json({ message: 'There are no shows in the database' });
+
     res.status(200).json(allShows);
 };
 

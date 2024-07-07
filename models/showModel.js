@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const { handleMongooseError } = require('../utils');
 
 const showSchema = new Schema(
     {
@@ -22,6 +23,8 @@ const showSchema = new Schema(
         versionKey: false,
     },
 );
+
+showSchema.post('save', handleMongooseError);
 
 const ShowModel = model('Shows', showSchema);
 
