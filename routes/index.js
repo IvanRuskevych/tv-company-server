@@ -4,8 +4,8 @@ const customersRouter = require('./customers');
 const agentsRouter = require('./agents');
 
 module.exports = {
-    authRouter,
-    showsRouter,
-    customersRouter,
-    agentsRouter,
+  authRouter,
+  showsRouter,
+  customersRouter,
+  agentsRouter,
 };

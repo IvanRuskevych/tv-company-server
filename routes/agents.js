@@ -1,15 +1,13 @@
 const { Router } = require('express');
 
-const { getAllAgents, createAgent, updateAgentData } = require('../controllers');
-const { authenticate, validateBody } = require('../middlewares');
 const { agentSchema } = require('../schema');
+const { authenticate, validateBody } = require('../middlewares');
+const { getAllAgents, createAgent, updateAgentData, deleteAgent } = require('../controllers');
 
 const router = Router();
 
 router.use(authenticate);
-
-router.get('/', getAllAgents);
-router.post('/', validateBody(agentSchema), createAgent);
-router.put('/:agentId', validateBody(agentSchema), updateAgentData);
+router.route('/').get(getAllAgents).post(validateBody(agentSchema), createAgent);
+router.route('/:agentId').put(validateBody(agentSchema), updateAgentData).delete(deleteAgent);
 
 module.exports = router;
