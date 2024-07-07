@@ -19,7 +19,7 @@ const editCustomerData = async (req, res) => {
     const { customerId } = req.params;
 
     const result = await updateDocByID(CustomerModel, customerId, req.body);
-    if (!result) throw httpError(404, 'Customer not found !!!');
+    if (!result) throw httpError(404, 'Customer not found');
 
     res.status(204).send();
 };
