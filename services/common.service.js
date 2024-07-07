@@ -2,4 +2,5 @@ module.exports.getExistsDoc = async (model, filters) => await model.exists({ ...
 
 module.exports.getAllDoc = async (model) => await model.find();
 
-module.exports.updateDocByID = async (model, id, data) => await model.findByIdAndUpdate(id, { ...data });
+module.exports.updateDocByID = async (model, id, data) =>
+  await model.findByIdAndUpdate(id, { ...data }, { new: true }).select('-createdAt -updatedAt');
