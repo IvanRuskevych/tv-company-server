@@ -7,7 +7,7 @@ dotenv.config({
     path: process.env.NODE_ENV === 'production' ? './environments/production.env' : './environments/.env',
 });
 
-const { authRouter, showsRouter } = require('./routes');
+const { authRouter, showsRouter, customersRouter } = require('./routes');
 
 const app = express();
 const formatLogger = app.get('env') === 'development' ? 'dev' : 'short';
@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 // Routes
 app.use('/auth', authRouter);
 app.use('/shows', showsRouter);
+app.use('/customers', customersRouter);
 
 // Error settings
 app.use((req, res) => {
