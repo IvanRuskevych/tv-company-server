@@ -1,6 +1,7 @@
 const { login, currentUser } = require('./auth');
 const { createShow, getAllShow } = require('./shows');
 const { createCustomer, editCustomerData, getAllCustomers } = require('./customers');
+const { createAgent, updateAgentData, getAllAgents } = require('./agents');
 
 module.exports = {
     login,
@@ -12,4 +13,8 @@ module.exports = {
     createCustomer,
     editCustomerData,
     getAllCustomers,
+
+    createAgent,
+    updateAgentData,
+    getAllAgents,
 };
