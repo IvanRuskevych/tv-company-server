@@ -1,19 +1,3 @@
-// const errorMessageList = {
-//     400: 'Bad Request',
-//     401: 'Unauthorized',
-//     403: 'Forbidden',
-//     404: 'Not Found',
-//     409: 'Conflict',
-// };
-//
-// const httpError = (status, message = errorMessageList[status]) => {
-//     const err = new Error(message);
-//     err.status = status;
-//     return err;
-// };
-//
-// module.exports = { httpError };
-
 const errorMessageList = {
     400: 'Bad Request',
     401: 'Unauthorized',
@@ -22,12 +6,10 @@ const errorMessageList = {
     409: 'Conflict',
 };
 
-const httpError = (status, message = errorMessageList[status]) => {
+module.exports.httpError = (status, message = errorMessageList[status]) => {
     const error = new Error(message);
 
     error.status = status;
 
     return error;
 };
-
-module.exports = { httpError };

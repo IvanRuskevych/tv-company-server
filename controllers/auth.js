@@ -3,6 +3,7 @@ const { httpError, ctrlWrapper } = require('../utils');
 const { userRolesEnum } = require('../constants');
 
 const { KEY_ACCESS_TOKEN, KEY_REFRESH_TOKEN } = process.env;
+console.log('KEY', KEY_ACCESS_TOKEN, KEY_REFRESH_TOKEN);
 
 const login = async (req, res) => {
     const { employeeID, password } = req.body;
