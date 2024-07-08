@@ -1,16 +1,12 @@
-const { updateUserDataByID, getExistsUser, getUserById } = require('./auth.service');
+const { getExistsDoc, getAllDocs, getDocByID, updateDocByID } = require('./common.service');
 const { createToken, verifyToken } = require('./jwt.service');
-const { getExistsDoc, getAllDoc, updateDocByID } = require('./common.service');
 
 module.exports = {
-    updateUserDataByID,
-    getExistsUser,
-    getUserById,
+  getExistsDoc,
+  getAllDocs,
+  getDocByID,
+  updateDocByID,
 
-    createToken,
-    verifyToken,
-
-    getExistsDoc,
-    getAllDoc,
-    updateDocByID,
+  createToken,
+  verifyToken,
 };

@@ -1,4 +1,5 @@
-const { createToken, updateUserDataByID, getExistsUser } = require('../services');
+const { UserModel } = require('../models');
+const { getExistsDoc, updateDocByID, createToken } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 const { userRolesEnum } = require('../constants');
 
@@ -8,9 +9,9 @@ const login = async (req, res) => {
   const { employeeID, password } = req.body;
 
   // find user by employeeID & password
-  const { _id: id, role } = await getExistsUser(employeeID, password, '_id role');
+  const { _id: userId, role } = await getExistsDoc(UserModel, { employeeID, password });
 
-  if (!id) {
+  if (!userId) {
     throw httpError(401, 'Employee ID or password is wrong');
   }
 
@@ -19,14 +20,14 @@ const login = async (req, res) => {
   }
 
   // create tokens
-  const accToken = createToken(id, KEY_ACCESS_TOKEN, '1h');
-  const refToken = createToken(id, KEY_REFRESH_TOKEN, '9h');
+  const accToken = createToken(userId, KEY_ACCESS_TOKEN, '1h');
+  const refToken = createToken(userId, KEY_REFRESH_TOKEN, '9h');
 
   // Update user data
-  const { name, phone, accessToken, refreshToken } = await updateUserDataByID(id, accToken, refToken);
+  const { name, phone, accessToken, refreshToken } = await updateDocByID(UserModel, userId, { accessToken: accToken, refreshToken: refToken });
 
   res.status(200).json({
-    user: { name, phone },
+    user: { name, phone, role },
     tokens: {
       accessToken,
       refreshToken,
