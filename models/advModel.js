@@ -1,9 +1,10 @@
 const { Schema, model } = require('mongoose');
+
 const { handleMongooseError } = require('../utils');
 
 const advSchema = new Schema(
   {
-    name: { type: String },
+    name: { type: String, required: true },
     show: {
       type: Schema.Types.ObjectId,
       ref: 'Shows',
@@ -19,6 +20,10 @@ const advSchema = new Schema(
       ref: 'Agents',
       required: true,
     },
+    date: {
+      type: Date,
+      required: true,
+    },
     duration: {
       type: Number,
       required: true,
@@ -32,6 +37,6 @@ const advSchema = new Schema(
 
 advSchema.post('save', handleMongooseError);
 
-const AdvModel = model('Adv', advSchema);
+const AdvModel = model('Advs', advSchema);
 
 module.exports = { AdvModel };

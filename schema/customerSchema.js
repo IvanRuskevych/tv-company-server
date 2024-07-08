@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const { regex } = require('../constants');
 
 module.exports.customerSchema = Joi.object().keys({

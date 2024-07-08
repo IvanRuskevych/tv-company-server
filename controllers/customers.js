@@ -1,15 +1,16 @@
 const { CustomerModel } = require('../models');
-const { getExistsDoc, getAllDoc, updateDocByID } = require('../services');
+const { getExistsDoc, getAllDocs, updateDocByID, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 
 // Create new customer
 const createCustomer = async (req, res) => {
-  const { name, phone, contactPerson, bankDetails } = req.body;
+  const { name } = req.body;
 
   const isCustomerExist = await getExistsDoc(CustomerModel, { name });
+
   if (isCustomerExist) throw httpError(409, 'Customer already exists');
 
-  const newCustomer = await CustomerModel.create({ name, phone, contactPerson, bankDetails });
+  const newCustomer = await CustomerModel.create(req.body);
 
   res.status(201).json(newCustomer);
 };
@@ -19,6 +20,7 @@ const updateCustomerData = async (req, res) => {
   const { customerId } = req.params;
 
   const updatedCustomer = await updateDocByID(CustomerModel, customerId, req.body);
+
   if (!updatedCustomer) throw httpError(404, 'Customer not found');
 
   res.status(200).json(updatedCustomer);
@@ -26,11 +28,22 @@ const updateCustomerData = async (req, res) => {
 
 // Get all customers
 const getAllCustomers = async (req, res) => {
-  const allCustomers = await getAllDoc(CustomerModel);
+  const allCustomers = await getAllDocs(CustomerModel);
 
   if (!allCustomers.length) res.status(200).json({ messages: 'There are no customers in the database' });
 
   res.status(200).json(allCustomers);
+};
+
+// Get customer by ID
+const getCustomerById = async (req, res) => {
+  const { customerId } = req.params;
+
+  const customer = await getDocByID(CustomerModel, customerId);
+
+  if (!customer) throw httpError(404, 'Customer not found.');
+
+  res.status(200).json(customer);
 };
 
 // Delete agent
@@ -38,6 +51,7 @@ const deleteCustomer = async (req, res) => {
   const { customerId } = req.params;
 
   const isCustomerExist = await CustomerModel.findById(customerId);
+
   if (!isCustomerExist) throw httpError(404, 'The agent does not exist or has been deleted.');
 
   await CustomerModel.findByIdAndDelete(customerId);
@@ -49,5 +63,6 @@ module.exports = {
   createCustomer: ctrlWrapper(createCustomer),
   updateCustomerData: ctrlWrapper(updateCustomerData),
   getAllCustomers: ctrlWrapper(getAllCustomers),
+  getCustomerById: ctrlWrapper(getCustomerById),
   deleteCustomer: ctrlWrapper(deleteCustomer),
 };

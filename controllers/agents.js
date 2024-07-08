@@ -1,5 +1,5 @@
-const { getExistsDoc, updateDocByID, getAllDoc } = require('../services');
 const { AgentModel } = require('../models');
+const { getExistsDoc, updateDocByID, getAllDocs, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 
 // Create new agent
@@ -7,6 +7,7 @@ const createAgent = async (req, res) => {
   const { name, commission } = req.body;
 
   const isAgentExist = await getExistsDoc(AgentModel, { name });
+
   if (isAgentExist) throw httpError(409, 'Agent already exists.');
 
   const newAgent = await AgentModel.create({ name, commission });
@@ -19,6 +20,7 @@ const updateAgentData = async (req, res) => {
   const { agentId } = req.params;
 
   const updatedAgent = await updateDocByID(AgentModel, agentId, req.body);
+
   if (!updatedAgent) throw httpError(404, 'Agent not found.');
 
   res.status(200).json(updatedAgent);
@@ -26,11 +28,22 @@ const updateAgentData = async (req, res) => {
 
 // Get all agents
 const getAllAgents = async (req, res) => {
-  const allAgents = await getAllDoc(AgentModel);
+  const allAgents = await getAllDocs(AgentModel);
 
   if (!allAgents.length) res.status(200).json({ messages: 'There are no agents in the database.' });
 
   res.status(200).json(allAgents);
+};
+
+// Get agent by ID
+const getAgentById = async (req, res) => {
+  const { agentId } = req.params;
+
+  const agent = await getDocByID(AgentModel, agentId);
+
+  if (!agent) throw httpError(404, 'Agent not found.');
+
+  res.status(200).json(agent);
 };
 
 // Delete agent
@@ -49,5 +62,6 @@ module.exports = {
   createAgent: ctrlWrapper(createAgent),
   updateAgentData: ctrlWrapper(updateAgentData),
   getAllAgents: ctrlWrapper(getAllAgents),
+  getAgentById: ctrlWrapper(getAgentById),
   deleteAgent: ctrlWrapper(deleteAgent),
 };

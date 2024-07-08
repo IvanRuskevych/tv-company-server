@@ -1,6 +1,7 @@
-module.exports.getExistsDoc = async (model, filters) => await model.exists({ ...filters });
+module.exports.getExistsDoc = (model, filters) => model.exists({ ...filters }).select('role');
 
-module.exports.getAllDoc = async (model) => await model.find();
+module.exports.getAllDocs = (model) => model.find().select('-createdAt -updatedAt');
 
-module.exports.updateDocByID = async (model, id, data) =>
-  await model.findByIdAndUpdate(id, { ...data }, { new: true }).select('-createdAt -updatedAt');
+module.exports.getDocByID = (model, id) => model.findById(id).select('-createdAt -updatedAt');
+
+module.exports.updateDocByID = (model, id, data) => model.findByIdAndUpdate(id, { ...data }, { new: true }).select('-createdAt -updatedAt');

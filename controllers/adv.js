@@ -1,13 +1,16 @@
 const { AdvModel } = require('../models');
-const { getExistsDoc, getAllDoc } = require('../services');
+const { getExistsDoc, updateDocByID, getDocByID } = require('../services');
 const { ctrlWrapper, httpError } = require('../utils');
 
 // Create new advertisement
 const createAdv = async (req, res) => {
-  // const isAdvExist = await getExistsDoc({ name });
-  // if (!isAdvExist) throw httpError(409, 'Advertisement already exists');
+  const { name } = req.body;
 
-  const newAdv = await AdvModel.create({ ...req.body });
+  const isAdvExist = await getExistsDoc(AdvModel, { name });
+
+  if (isAdvExist) throw httpError(409, 'Advertisement already exists');
+
+  const newAdv = await AdvModel.create(req.body);
 
   res.status(201).json(newAdv);
 };
@@ -16,7 +19,7 @@ const createAdv = async (req, res) => {
 const updateAdv = async (req, res) => {
   const { advId } = req.params;
 
-  const updatedAdv = await AdvModel.findByIdAndUpdate(advId, req.body);
+  const updatedAdv = await updateDocByID(AdvModel, advId, req.body);
 
   if (!updatedAdv) throw httpError(404, 'Advertisement not found.');
 
@@ -25,18 +28,19 @@ const updateAdv = async (req, res) => {
 
 // Get all advertisements
 const getAllAdv = async (req, res) => {
-  const allAdv = await AdvModel.find().populate('show').populate('customer').populate('agent');
+  const allAdv = await AdvModel.find().populate('show').populate('customer').populate('agent').select('-createdAt -updatedAt');
 
   if (!allAdv.length) res.status(200).json({ message: 'There are no advertisements in the database.' });
 
   res.status(200).json(allAdv);
 };
 
-// Get  advertisement  by id
+// Get  advertisement by ID
 const getAdvById = async (req, res) => {
   const { advId } = req.params;
 
-  const adv = await AdvModel.findById(advId);
+  const adv = await getDocByID(AdvModel, advId);
+
   if (!adv) throw httpError(404, 'Advertisement not found.');
 
   res.status(200).json(adv);
@@ -46,7 +50,7 @@ const getAdvById = async (req, res) => {
 const deleteAdv = async (req, res) => {
   const { advId } = req.params;
 
-  const isAdvExist = await getExistsDoc(advId);
+  const isAdvExist = await AdvModel.findById(advId);
 
   if (!isAdvExist) throw httpError(404, 'The advertisement does not exist or has been deleted.');
 

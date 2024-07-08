@@ -1,10 +1,11 @@
 const { Schema, model } = require('mongoose');
+
 const { handleMongooseError } = require('../utils');
 
 const agentSchema = new Schema(
   {
     name: { type: String, required: true },
-    commission: { type: Number, required: true },
+    commission: { type: Number, min: 0, max: 100, required: true },
   },
   {
     timestamps: true,
