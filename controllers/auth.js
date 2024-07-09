@@ -23,7 +23,7 @@ const login = async (req, res) => {
   const accToken = createToken(userId, KEY_ACCESS_TOKEN, '1h');
   const refToken = createToken(userId, KEY_REFRESH_TOKEN, '9h');
 
-  // Update user data
+  // Update user data by adding accessToken & refreshToken
   const { name, phone, accessToken, refreshToken } = await updateDocByID(UserModel, userId, { accessToken: accToken, refreshToken: refToken });
 
   res.status(200).json({
@@ -35,11 +35,6 @@ const login = async (req, res) => {
   });
 };
 
-const currentUser = ({ user }, res) => {
-  res.status(200).json({ user });
-};
-
 module.exports = {
   login: ctrlWrapper(login),
-  currentUser: ctrlWrapper(currentUser),
 };

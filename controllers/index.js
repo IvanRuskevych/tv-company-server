@@ -1,4 +1,5 @@
-const { login, currentUser } = require('./auth');
+const { login } = require('./auth');
+const { currentUser } = require('./users');
 const { createAdv, updateAdv, getAllAdv, getAdvById, deleteAdv } = require('./adv');
 const { createAgent, updateAgentData, getAllAgents, getAgentById, deleteAgent } = require('./agents');
 const { createCustomer, updateCustomerData, getAllCustomers, getCustomerById, deleteCustomer } = require('./customers');

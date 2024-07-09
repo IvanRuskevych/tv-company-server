@@ -13,12 +13,12 @@ module.exports.authenticate = async (req, res, next) => {
   try {
     const { payload: userId } = verifyToken(token, KEY_ACCESS_TOKEN);
 
-    const { name, phone, accessToken } = await getDocByID(UserModel, userId).select('-_id -role -password -refreshToken -employeeID');
+    const { name, phone, role, accessToken } = await getDocByID(UserModel, userId).select('-_id -password -refreshToken -employeeID');
 
     if (accessToken !== token) next(httpError(401, 'The token is not valid'));
 
     // set user data to req for using in controllers
-    req.user = { name, phone };
+    req.user = { name, phone, role };
 
     next();
   } catch (err) {

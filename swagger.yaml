@@ -1,0 +1,162 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: TV Company API
+  description: API Documentation for TV Company
+host: localhost:5000
+basePath: /api
+schemes:
+  - http
+paths:
+  /shows:
+    get:
+      summary: Get all shows
+      tags:
+        - Shows
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Show'
+    post:
+      summary: Create a new show
+      tags:
+        - Shows
+      parameters:
+        - in: body
+          name: body
+          description: Show object
+          required: true
+          schema:
+            $ref: '#/definitions/Show'
+      responses:
+        '201':
+          description: Show created
+        '400':
+          description: Invalid input
+  /ads:
+    get:
+      summary: Get all ads
+      tags:
+        - Ads
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Ad'
+    post:
+      summary: Create a new ad
+      tags:
+        - Ads
+      parameters:
+        - in: body
+          name: body
+          description: Ad object
+          required: true
+          schema:
+            $ref: '#/definitions/Ad'
+      responses:
+        '201':
+          description: Ad created
+        '400':
+          description: Invalid input
+  /agents:
+    get:
+      summary: Get all agents
+      tags:
+        - Agents
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Agent'
+    post:
+      summary: Create a new agent
+      tags:
+        - Agents
+      parameters:
+        - in: body
+          name: body
+          description: Agent object
+          required: true
+          schema:
+            $ref: '#/definitions/Agent'
+      responses:
+        '201':
+          description: Agent created
+        '400':
+          description: Invalid input
+  /customers:
+    get:
+      summary: Get all customers
+      tags:
+        - Customers
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Customer'
+    post:
+      summary: Create a new customer
+      tags:
+        - Customers
+      parameters:
+        - in: body
+          name: body
+          description: Customer object
+          required: true
+          schema:
+            $ref: '#/definitions/Customer'
+      responses:
+        '201':
+          description: Customer created
+        '400':
+          description: Invalid input
+definitions:
+  Show:
+    type: object
+    properties:
+      name:
+        type: string
+      rating:
+        type: number
+      price:
+        type: number
+  Ad:
+    type: object
+    properties:
+      show:
+        type: string
+      customer:
+        type: string
+      date:
+        type: string
+        format: date
+      duration:
+        type: number
+  Agent:
+    type: object
+    properties:
+      name:
+        type: string
+      commission:
+        type: number
+  Customer:
+    type: object
+    properties:
+      name:
+        type: string
+      bankDetails:
+        type: string
+      phone:
+        type: string
+      contactPerson:
+        type: string
