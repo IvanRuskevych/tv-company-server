@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: TV Project API
+  description: API документація для TV проекту
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+  - url: https://tv-company-server.onrender.com
+  
+tags:
+  - name: Auth
+    description: Authorization endpoints
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+      
+  - name: Users
+    description: Users endpoints
+
+  - name: Shows
+    description: Shows endpoints
+ 
+  - name: Advertisements
+    description: Advertisements endpoints
+    
+  - name: Agents
+    description: Agents endpoints description
+  
+paths:
+  /auth/login:
+    post:
+      tags: 
+      - Auth
+      summary: User login
+      description: User login description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeID:
+                  type: string
+                  example: '1235'
+                password:
+                  type: string
+                  example: 'Password2'
+      responses:
+        '200':
+          description: Authorization is successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Auth"
+        '401':
+          description: "Employee ID or password is wrong"
+        "403":
+          description: "You have no access rights"
+          
+  /users/current:
+    get:
+      tags: 
+      - Users
+      summary: Get current user info
+      description: Get current user description
+      security: 
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved current user info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+ 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Auth:
+      type: object
+      required: 
+        - user
+        - tokens
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        tokens:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIwNTM5NTQzLCJleHAiOjE3MjA1NDMxNDN9.TZ-yxIfetaKkf4Y4MA4ZbEVfQTImQRt7SULlddBQnY8"
+            refreshToken:
+              type: string
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIwNTM5NTQzLCJleHAiOjE3MjA1NDMxNDN9.TZ-yxIfetaKkf4Y4MA4ZbEVfQTImQRt7SULlddBQnY8" 
+    User:
+      type: object
+      required: 
+        - name
+        - phone
+        - role
+      properties:
+        name: 
+          type: string
+          example: "Ruskevych Ivan Petrovych"
+        phone:
+          type: string
+          example: "+380671234567"
+        role:
+          type: string
+          enum: 
+            - middle
+            - senior
+            - chief
+            - junior
+          example: "senior" 
+        
+      
+
