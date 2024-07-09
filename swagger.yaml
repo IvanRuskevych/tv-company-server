@@ -1,162 +1,124 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
+  title: TV Project API
+  description: API документація для TV проекту
   version: 1.0.0
-  title: TV Company API
-  description: API Documentation for TV Company
-host: localhost:5000
-basePath: /api
-schemes:
-  - http
+servers:
+  - url: http://localhost:8080
+  - url: https://tv-company-server.onrender.com
+  
+tags:
+  - name: Auth
+    description: Authorization endpoints
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+      
+  - name: Users
+    description: Users endpoints
+
+  - name: Shows
+    description: Shows endpoints
+ 
+  - name: Advertisements
+    description: Advertisements endpoints
+    
+  - name: Agents
+    description: Agents endpoints description
+  
 paths:
-  /shows:
-    get:
-      summary: Get all shows
-      tags:
-        - Shows
+  /auth/login:
+    post:
+      tags: 
+      - Auth
+      summary: User login
+      description: User login description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeID:
+                  type: string
+                  example: '1235'
+                password:
+                  type: string
+                  example: 'Password2'
       responses:
         '200':
-          description: Successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Show'
-    post:
-      summary: Create a new show
-      tags:
-        - Shows
-      parameters:
-        - in: body
-          name: body
-          description: Show object
-          required: true
-          schema:
-            $ref: '#/definitions/Show'
-      responses:
-        '201':
-          description: Show created
-        '400':
-          description: Invalid input
-  /ads:
+          description: Authorization is successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Auth"
+        '401':
+          description: "Employee ID or password is wrong"
+        "403":
+          description: "You have no access rights"
+          
+  /users/current:
     get:
-      summary: Get all ads
-      tags:
-        - Ads
+      tags: 
+      - Users
+      summary: Get current user info
+      description: Get current user description
+      security: 
+        - bearerAuth: []
       responses:
-        '200':
-          description: Successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Ad'
-    post:
-      summary: Create a new ad
-      tags:
-        - Ads
-      parameters:
-        - in: body
-          name: body
-          description: Ad object
-          required: true
-          schema:
-            $ref: '#/definitions/Ad'
-      responses:
-        '201':
-          description: Ad created
-        '400':
-          description: Invalid input
-  /agents:
-    get:
-      summary: Get all agents
-      tags:
-        - Agents
-      responses:
-        '200':
-          description: Successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Agent'
-    post:
-      summary: Create a new agent
-      tags:
-        - Agents
-      parameters:
-        - in: body
-          name: body
-          description: Agent object
-          required: true
-          schema:
-            $ref: '#/definitions/Agent'
-      responses:
-        '201':
-          description: Agent created
-        '400':
-          description: Invalid input
-  /customers:
-    get:
-      summary: Get all customers
-      tags:
-        - Customers
-      responses:
-        '200':
-          description: Successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Customer'
-    post:
-      summary: Create a new customer
-      tags:
-        - Customers
-      parameters:
-        - in: body
-          name: body
-          description: Customer object
-          required: true
-          schema:
-            $ref: '#/definitions/Customer'
-      responses:
-        '201':
-          description: Customer created
-        '400':
-          description: Invalid input
-definitions:
-  Show:
-    type: object
-    properties:
-      name:
-        type: string
-      rating:
-        type: number
-      price:
-        type: number
-  Ad:
-    type: object
-    properties:
-      show:
-        type: string
-      customer:
-        type: string
-      date:
-        type: string
-        format: date
-      duration:
-        type: number
-  Agent:
-    type: object
-    properties:
-      name:
-        type: string
-      commission:
-        type: number
-  Customer:
-    type: object
-    properties:
-      name:
-        type: string
-      bankDetails:
-        type: string
-      phone:
-        type: string
-      contactPerson:
-        type: string
+        "200":
+          description: Successfully retrieved current user info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+ 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Auth:
+      type: object
+      required: 
+        - user
+        - tokens
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        tokens:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIwNTM5NTQzLCJleHAiOjE3MjA1NDMxNDN9.TZ-yxIfetaKkf4Y4MA4ZbEVfQTImQRt7SULlddBQnY8"
+            refreshToken:
+              type: string
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIwNTM5NTQzLCJleHAiOjE3MjA1NDMxNDN9.TZ-yxIfetaKkf4Y4MA4ZbEVfQTImQRt7SULlddBQnY8" 
+    User:
+      type: object
+      required: 
+        - name
+        - phone
+        - role
+      properties:
+        name: 
+          type: string
+          example: "Ruskevych Ivan Petrovych"
+        phone:
+          type: string
+          example: "+380671234567"
+        role:
+          type: string
+          enum: 
+            - middle
+            - senior
+            - chief
+            - junior
+          example: "senior" 
+        
+      
+
