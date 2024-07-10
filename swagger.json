@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "TV Project API",
-    "description": "API документація для TV проекту",
+    "description": "API documentation for the TV-company project",
     "version": "1.0.0"
   },
   "servers": [
