@@ -1,7 +1,7 @@
 const Joi = require('joi').extend(require('@joi/date'));
 Joi.objectId = require('joi-objectid')(Joi);
 
-module.exports.advSchema = Joi.object().keys({
+module.exports.adSchema = Joi.object().keys({
   name: Joi.string().required().messages({
     'any.required': 'Advertisement name is required.',
     'string.base': 'Advertisement name must be a string.',
