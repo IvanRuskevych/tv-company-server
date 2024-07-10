@@ -52,7 +52,7 @@ const deleteCustomer = async (req, res) => {
 
   const isCustomerExist = await CustomerModel.findById(customerId);
 
-  if (!isCustomerExist) throw httpError(404, 'The agent does not exist or has been deleted.');
+  if (!isCustomerExist) throw httpError(404, 'The customer does not exist or has been deleted.');
 
   await CustomerModel.findByIdAndDelete(customerId);
 

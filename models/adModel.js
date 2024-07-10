@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const { handleMongooseError } = require('../utils');
 
-const advSchema = new Schema(
+const adSchema = new Schema(
   {
     name: { type: String, required: true },
     show: {
@@ -35,8 +35,8 @@ const advSchema = new Schema(
   },
 );
 
-advSchema.post('save', handleMongooseError);
+adSchema.post('save', handleMongooseError);
 
-const AdvModel = model('Advs', advSchema);
+const AdModel = model('Ads', adSchema);
 
-module.exports = { AdvModel };
+module.exports = { AdModel };

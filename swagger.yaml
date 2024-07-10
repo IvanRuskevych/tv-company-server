@@ -20,19 +20,22 @@ tags:
   - name: Shows
     description: Shows endpoints
  
-  - name: Advertisements
-    description: Advertisements endpoints
+  - name: Customers
+    description: Customers endpoints
     
   - name: Agents
-    description: Agents endpoints description
+    description: Agents endpoints
+    
+  - name: Advertisements
+    description: Advertisements endpoints
   
 paths:
   /auth/login:
     post:
       tags: 
-      - Auth
+        - Auth
       summary: User login
-      description: User login description
+      description: Endpoint for user login.
       requestBody:
         required: true
         content:
@@ -42,38 +45,592 @@ paths:
               properties:
                 employeeID:
                   type: string
-                  example: '1235'
+                  example: "1235"
                 password:
                   type: string
-                  example: 'Password2'
+                  example: "Password2"
       responses:
         '200':
-          description: Authorization is successful
+          description: Authorization successful
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Auth"
         '401':
-          description: "Employee ID or password is wrong"
+          description: Employee ID or password is incorrect
         "403":
-          description: "You have no access rights"
+          description: You do not have access rights
           
   /users/current:
     get:
-      tags: 
-      - Users
-      summary: Get current user info
-      description: Get current user description
       security: 
         - bearerAuth: []
+      tags: 
+        - Users
+      summary: Get current user info
+      description: Retrieve information about the current user.
       responses:
         "200":
-          description: Successfully retrieved current user info
+          description: Successfully retrieved current user information
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
- 
+        "401":
+          description: Not authorized
+      
+  /shows:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Shows
+      operationId: getAllShows
+      summary: Get list of all shows
+      description: Endpoint to get a list of all shows
+      responses:
+        '200':
+          description: Successfully retrieved list of shows
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Show-res"
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: There are no agents in the database.
+        "401":
+          description: Not authorized
+          
+    post:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Shows
+      operationId: createShow
+      summary: Create a new show
+      description: Endpoint to create a new show
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Show-req'
+      responses:
+        '201':
+          description: Show created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Show-res"
+        "401":
+          description: Not authorized
+        "409":
+          description: Show already exists
+
+  /shows/{showId}:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Shows
+      operationId: getShowByID
+      summary: Get a show by ID
+      description: Endpoint to get a show by its ID.
+      parameters:
+        - in: path
+          name: showId
+          required: true
+          description: Show ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '200':
+          description: Successfully retrieved the show
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Show-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Show not found
+
+    put:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Shows
+      operationId: updateShowData
+      summary: Update show data
+      description: Endpoint to update the data of an existing show.
+      parameters:
+        - in: path
+          name: showId
+          required: true
+          description: Show ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Show-req'
+      responses:
+        '200':
+          description: Show data updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Show-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Show not found
+
+    delete:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Shows
+      operationId: deleteShow
+      summary: Delete a show
+      description: Endpoint to delete a show by its ID
+      parameters:
+        - in: path
+          name: showId
+          required: true
+          description: Show ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '204':
+          description: Show deleted successfully
+        '404':
+          description: Show not found
+  
+  /customers:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Customers
+      operationId: getAllCustomers
+      summary: Get list of all customers
+      description: Endpoint to get a list of all customers
+      responses:
+        '200':
+          description: Successfully retrieved list of customers
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Customer-res"
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: There are no agents in the database.
+        "401":
+          description: Not authorized
+          
+    post:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Customers
+      operationId: createCustomer
+      summary: Create a new customer
+      description: Endpoint to create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer-req'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer-res"
+        "401":
+          description: Not authorized
+        "409":
+          description: Customer already exists
+
+  /customers/{customerId}:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Customers
+      operationId: getCustomerByID
+      summary: Get a customer by ID
+      description: Endpoint to get a customer by its ID.
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          description: Customer ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '200':
+          description: Successfully retrieved the customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Customer not found
+
+    put:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Customers
+      operationId: updateCustomerData
+      summary: Update customer data
+      description: Endpoint to update the data of an existing customer.
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          description: Customer ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer-req'
+      responses:
+        '200':
+          description: Customer data updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Customer not found
+
+    delete:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Customers
+      operationId: deleteCustomer
+      summary: Delete a customer
+      description: Endpoint to delete a customer by its ID
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          description: Customer ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '204':
+          description: Customer deleted successfully
+        '404':
+          description: Customer not found  
+  
+  /agents:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Agents
+      operationId: getAllAgents
+      summary: Get list of all agents
+      description: Endpoint to get a list of all agents
+      responses:
+        '200':
+          description: Successfully retrieved list of agents
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Agent-res"
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: There are no agents in the database.
+        "401":
+          description: Not authorized
+          
+    post:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Agents
+      operationId: createAgent
+      summary: Create a new agent
+      description: Endpoint to create a new agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Agent-req'
+      responses:
+        '201':
+          description: Agent created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Agent-res"
+        "401":
+          description: Not authorized
+        "409":
+          description: Agent already exists
+
+  /agents/{agentId}:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Agents
+      operationId: getAgentByID
+      summary: Get an agent by ID
+      description: Endpoint to get an agent by its ID.
+      parameters:
+        - in: path
+          name: agentId
+          required: true
+          description: Agent ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '200':
+          description: Successfully retrieved the agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Agent not found
+
+    put:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Agents
+      operationId: updateAgentData
+      summary: Update agent data
+      description: Endpoint to update the data of an existing agent.
+      parameters:
+        - in: path
+          name: agentId
+          required: true
+          description: Agent ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Agent-req'
+      responses:
+        '200':
+          description: Agent data updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Agent not found
+
+    delete:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Agents
+      operationId: deleteAgent
+      summary: Delete an agent
+      description: Endpoint to delete an agent by its ID
+      parameters:
+        - in: path
+          name: agentId
+          required: true
+          description: Agent ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '204':
+          description: Agent deleted successfully
+        '404':
+          description: Agent not found  
+
+  /ads:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Advertisements
+      operationId: getAllAds
+      summary: Get list of all advertisements
+      description: Endpoint to get a list of all advertisements
+      responses:
+        '200':
+          description: Successfully retrieved list of advertisements
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Advertisement-res"
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: There are no advertisements in the database.
+        "401":
+          description: Not authorized
+          
+    post:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Advertisements
+      operationId: createAd
+      summary: Create a new advertisement
+      description: Endpoint to create a new advertisement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Advertisement-req'
+      responses:
+        '201':
+          description: Advertisement created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Advertisement-res"
+        "401":
+          description: Not authorized
+        "409":
+          description: Advertisement already exists
+
+  /ads/{adsId}:
+    get:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Advertisements
+      operationId: getAdByID
+      summary: Get an advertisement by ID
+      description: Endpoint to get a advertisement by its ID.
+      parameters:
+        - in: path
+          name: adsId
+          required: true
+          description: Advertisement ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '200':
+          description: Successfully retrieved the advertisement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Advertisement not found
+
+    put:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Advertisements
+      operationId: updateAdData
+      summary: Update advertisement data
+      description: Endpoint to update the data of an existing advertisement.
+      parameters:
+        - in: path
+          name: adsId
+          required: true
+          description: Advertisement ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Advertisement-req'
+      responses:
+        '200':
+          description: Advertisement data updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement-res'
+        "401":
+          description: Not authorized
+        '404':
+          description: Advertisement not found
+
+    delete:
+      security: 
+        - bearerAuth: []
+      tags: 
+        - Advertisements
+      operationId: deleteAd
+      summary: Delete an advertisement
+      description: Endpoint to delete an advertisement by its ID
+      parameters:
+        - in: path
+          name: adsId
+          required: true
+          description: Advertisement ID
+          schema:
+            type: string
+          example: "668c083ec1c3e8df54c6f669"
+      responses:
+        '204':
+          description: Advertisement deleted successfully
+        '404':
+          description: Advertisement not found
+
 components:
   securitySchemes:
     bearerAuth:
@@ -91,6 +648,9 @@ components:
           $ref: "#/components/schemas/User"
         tokens:
           type: object
+          required: 
+            - accessToken
+            - refreshToken
           properties:
             accessToken:
               type: string
@@ -120,5 +680,143 @@ components:
             - junior
           example: "senior" 
         
+    
+    Show-req:
+      type: object
+      required: 
+        - name
+        - rating
+        - pricePerCommercial
+      properties:
+        name:
+          type: string
+          example: "Show name"
+        rating:
+          type: number
+          example: 100
+        pricePerCommercial:
+          type: number
+          example: 125
+    Show-res:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              example: '668c083ec1c3e8df54c6f669'
+        - $ref: "#/components/schemas/Show-req"
       
+       
+    Agent-req:
+      type: object
+      required: 
+        - name
+        - commission
+      properties:
+        name:
+          type: string
+          example: 'Agent fullname'
+        commission:
+          type: number
+          example: 10
 
+    Agent-res:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              example: '1'
+        - $ref: "#/components/schemas/Agent-req"
+          
+    Customer-req:
+      type: object
+      required: 
+        - name
+        - phone
+        - contactPerson
+        - bankDetails
+      properties:
+        name:
+          type: string
+          example: 'Customer fullname'
+        phone:
+          type: string
+          example: "+380671234567"
+        contactPerson:
+          type: string
+          example: 'Contact person full name'
+        bankDetails:
+          type: object
+          required: 
+            - bankName
+            - customerCode
+            - iban
+          properties:
+            bankName: 
+              type: string
+              example: "Bank name"
+            customerCode: 
+              type: string
+              example: "12345678"
+            iban:
+              type: string
+              example: "UA12345678901234567890"
+              
+    Customer-res:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              example: "668c083ec1c3e8df54c6f669"
+        - $ref: "#/components/schemas/Customer-req"    
+            
+    Advertisement-req:
+      type: object
+      required: 
+        - name
+        - date
+        - duration
+        - show
+        - customer
+        - agent
+      properties:
+        name:
+          type: string
+          example: 'Advertisement title'
+        date:
+          type: string
+          format: date-time
+          example: '2024-07-09T12:34:56Z'
+        duration:
+          type: number
+          example: 30
+        show:
+          type: string
+          example: '60d6fe96f5106d3d4c8f0e7e'
+        customer:
+          type: string
+          example: '60d6fe96f5106d3d4c8f0e7e'
+        agent:
+          type: string
+          example: '60d6fe96f5106d3d4c8f0e7e'
+
+    Advertisement-res:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              example: "668c083ec1c3e8df54c6f669"
+        - $ref: "#/components/schemas/Advertisement-req"       
+        
+        
