@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const { serve, setup } = require('swagger-ui-express');
 const dotenv = require('dotenv');
 
 dotenv.config({
@@ -8,6 +9,7 @@ dotenv.config({
 });
 
 const { authRouter, showsRouter, customersRouter, agentsRouter, adsRouter, usersRouter } = require('./routes');
+const swaggerDoc = require('./swagger.json');
 
 const app = express();
 const formatLogger = app.get('env') === 'development' ? 'dev' : 'short';
@@ -17,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
+app.use('/api-docs', serve, setup(swaggerDoc));
 
 // Routes
 app.use('/auth', authRouter);
