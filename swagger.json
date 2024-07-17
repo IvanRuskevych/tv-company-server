@@ -151,7 +151,7 @@
                       "properties": {
                         "message": {
                           "type": "string",
-                          "example": "There are no agents in the database."
+                          "example": "There are no shows in the database."
                         }
                       }
                     }
@@ -369,7 +369,7 @@
                       "properties": {
                         "message": {
                           "type": "string",
-                          "example": "There are no agents in the database."
+                          "example": "There are no customers in the database."
                         }
                       }
                     }
