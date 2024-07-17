@@ -1,4 +1,4 @@
-const { AgentModel } = require('../models');
+const { AgentModel, ShowModel } = require('../models');
 const { getExistsDoc, updateDocByID, getAllDocs, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 
@@ -18,6 +18,11 @@ const createAgent = async (req, res) => {
 // Edit agent information
 const updateAgentData = async (req, res) => {
   const { agentId } = req.params;
+  const { name } = req.body;
+
+  const isAgentExist = await getExistsDoc(AgentModel, { name });
+
+  if (isAgentExist) throw httpError(409, 'Agent already exists.');
 
   const updatedAgent = await updateDocByID(AgentModel, agentId, req.body);
 
@@ -51,6 +56,7 @@ const deleteAgent = async (req, res) => {
   const { agentId } = req.params;
 
   const isAgentExist = await AgentModel.findById(agentId);
+
   if (!isAgentExist) throw httpError(404, 'The agent does not exist or has been deleted.');
 
   await AgentModel.findByIdAndDelete(agentId);

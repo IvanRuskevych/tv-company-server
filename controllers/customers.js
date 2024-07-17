@@ -1,4 +1,4 @@
-const { CustomerModel } = require('../models');
+const { CustomerModel, ShowModel } = require('../models');
 const { getExistsDoc, getAllDocs, updateDocByID, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 
@@ -18,6 +18,11 @@ const createCustomer = async (req, res) => {
 // Edit customer information
 const updateCustomerData = async (req, res) => {
   const { customerId } = req.params;
+  const { name } = req.body;
+
+  const isCustomerExist = await getExistsDoc(CustomerModel, { name });
+
+  if (isCustomerExist) throw httpError(409, 'Customer already exists.');
 
   const updatedCustomer = await updateDocByID(CustomerModel, customerId, req.body);
 
