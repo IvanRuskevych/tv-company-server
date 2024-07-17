@@ -18,6 +18,11 @@ const createShow = async (req, res) => {
 // Edit show information
 const updateShowData = async (req, res) => {
   const { showId } = req.params;
+  const { name } = req.body;
+
+  const isShowExist = await getExistsDoc(ShowModel, { name });
+
+  if (isShowExist) throw httpError(409, 'Show already exists.');
 
   const updatedShowData = await updateDocByID(ShowModel, showId, req.body);
 

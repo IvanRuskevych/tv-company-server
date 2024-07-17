@@ -301,6 +301,9 @@
           },
           "404": {
             "description": "Show not found"
+          },
+          "409": {
+            "description": "Show already exists"
           }
         }
       },
@@ -519,6 +522,9 @@
           },
           "404": {
             "description": "Customer not found"
+          },
+          "409": {
+            "description": "Customer already exists"
           }
         }
       },
@@ -737,6 +743,9 @@
           },
           "404": {
             "description": "Agent not found"
+          },
+          "409": {
+            "description": "Agent already exists"
           }
         }
       },
@@ -955,6 +964,9 @@
           },
           "404": {
             "description": "Advertisement not found"
+          },
+          "409": {
+            "description": "Advertisement already exists"
           }
         }
       },

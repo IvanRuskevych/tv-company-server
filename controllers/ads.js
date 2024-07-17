@@ -1,4 +1,4 @@
-const { AdModel } = require('../models');
+const { AdModel, ShowModel } = require('../models');
 const { getExistsDoc, updateDocByID, getDocByID } = require('../services');
 const { ctrlWrapper, httpError } = require('../utils');
 
@@ -18,6 +18,11 @@ const createAd = async (req, res) => {
 // Edit advertisement information
 const updateAdData = async (req, res) => {
   const { adId } = req.params;
+  const { name } = req.body;
+
+  const isAdExist = await getExistsDoc(AdModel, { name });
+
+  if (isAdExist) throw httpError(409, 'Advertisement already exists.');
 
   const updatedAd = await updateDocByID(AdModel, adId, req.body);
 
