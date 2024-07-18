@@ -1,4 +1,4 @@
-const { CustomerModel, ShowModel } = require('../models');
+const { CustomerModel } = require('../models');
 const { getExistsDoc, getAllDocs, updateDocByID, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 
