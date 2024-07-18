@@ -28,11 +28,11 @@ const customerSchema = new Schema(
         type: String,
         required: true,
       },
-      customerCode: {
+      identifierTIN: {
         type: String,
         validate: {
           validator(val) {
-            return regex.CUSTOMER_CODE.test(val);
+            return regex.TIN.test(val);
           },
           message: (props) => `${props.value} is not a valid customer code! It should contain only digits.`,
         },

@@ -1173,7 +1173,7 @@
             "type": "object",
             "required": [
               "bankName",
-              "customerCode",
+              "identifierTIN",
               "iban"
             ],
             "properties": {
@@ -1181,7 +1181,7 @@
                 "type": "string",
                 "example": "Bank name"
               },
-              "customerCode": {
+              "identifierTIN": {
                 "type": "string",
                 "example": "12345678"
               },

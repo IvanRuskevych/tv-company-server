@@ -7,6 +7,7 @@ const { getAllAgents, createAgent, updateAgentData, deleteAgent, getAgentById } 
 const router = Router();
 
 // router.use(authenticate);
+
 router.route('/').post(validateBody(agentSchema), createAgent).get(getAllAgents);
 router.route('/:agentId').put(validateBody(agentSchema), updateAgentData).get(getAgentById).delete(deleteAgent);
 

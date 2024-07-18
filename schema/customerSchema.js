@@ -25,7 +25,7 @@ module.exports.customerSchema = Joi.object().keys({
       'string.base': 'Bank name must be a string.',
       'string.empty': "Field 'Bank name' cannot be empty.",
     }),
-    customerCode: Joi.string().pattern(regex.CUSTOMER_CODE).required().messages({
+    identifierTIN: Joi.string().pattern(regex.TIN).required().messages({
       'any.required': 'Customer code is required.',
       'string.base': 'Customer code must be a string.',
       'string.empty': "Field 'Customer code' cannot be empty.",
