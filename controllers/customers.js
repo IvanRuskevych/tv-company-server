@@ -51,7 +51,7 @@ const getCustomerById = async (req, res) => {
   res.status(200).json(customer);
 };
 
-// Delete agent
+// Delete customer
 const deleteCustomer = async (req, res) => {
   const { customerId } = req.params;
 
