@@ -15,3 +15,9 @@ module.exports.loginSchema = Joi.object()
   .messages({
     'any.required': 'Credentials object is required.',
   });
+
+module.exports.refreshTokenSchema = Joi.object().keys({
+  refreshToken: Joi.string().required().messages({
+    'any.required': 'Refresh token is required.',
+  }),
+});

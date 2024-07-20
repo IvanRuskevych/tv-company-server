@@ -57,6 +57,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "employeeID",
+                  "password"
+                ],
                 "properties": {
                   "employeeID": {
                     "type": "string",
@@ -87,6 +91,94 @@
           },
           "403": {
             "description": "You do not have access rights"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh token",
+        "description": "Endpoint for пenerates new access and refresh tokens.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "refreshToken"
+                ],
+                "properties": {
+                  "refreshToken": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIxNDc5NDkxLCJleHAiOjE3MjE1MTE4OTF9.AG-wL6B5KMD8Il_PALrHyFIp0xN7iA_OW7vAJERudFw"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIxNDc5NDkxLCJleHAiOjE3MjE0ODMwOTF9.VNcQKI4DE3zekp8ofBtQmxpcjj2vaUt93UotFKR7YGkі"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIxNDc5NDkxLCJleHAiOjE3MjE1MTE4OTF9.AG-wL6B5KMD8Il_PALrHyFIp0xN7iA_OW7vAJERudFw"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Refresh token does not valid"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "User logout",
+        "description": "Logs out the user by clearing their access and refresh tokens.",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
@@ -1017,29 +1109,17 @@
       "Auth": {
         "type": "object",
         "required": [
-          "user",
-          "tokens"
+          "accessToken",
+          "refreshToken"
         ],
         "properties": {
-          "user": {
-            "$ref": "#/components/schemas/User"
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIxNDc5NDkxLCJleHAiOjE3MjE0ODMwOTF9.VNcQKI4DE3zekp8ofBtQmxpcjj2vaUt93UotFKR7YGk"
           },
-          "tokens": {
-            "type": "object",
-            "required": [
-              "accessToken",
-              "refreshToken"
-            ],
-            "properties": {
-              "accessToken": {
-                "type": "string",
-                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIwNTM5NTQzLCJleHAiOjE3MjA1NDMxNDN9.TZ-yxIfetaKkf4Y4MA4ZbEVfQTImQRt7SULlddBQnY8"
-              },
-              "refreshToken": {
-                "type": "string",
-                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIwNTM5NTQzLCJleHAiOjE3MjA1NDMxNDN9.TZ-yxIfetaKkf4Y4MA4ZbEVfQTImQRt7SULlddBQnY8"
-              }
-            }
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjY4OTJmZWI3OWM3NDBmNmJiMDIxMThlIiwiaWF0IjoxNzIxNDc5NDkxLCJleHAiOjE3MjE1MTE4OTF9.AG-wL6B5KMD8Il_PALrHyFIp0xN7iA_OW7vAJERudFw"
           }
         }
       },

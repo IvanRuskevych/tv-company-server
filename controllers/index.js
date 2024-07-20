@@ -1,4 +1,4 @@
-const { login } = require('./auth');
+const { login, logout, refresh } = require('./auth');
 const { currentUser } = require('./users');
 const { createAd, updateAdData, getAllAds, getAdById, deleteAd } = require('./ads');
 const { createAgent, updateAgentData, getAllAgents, getAgentById, deleteAgent } = require('./agents');
@@ -6,6 +6,12 @@ const { createCustomer, updateCustomerData, getAllCustomers, getCustomerById, de
 const { createShow, updateShowData, getAllShow, getShowByID, deleteShow } = require('./shows');
 
 module.exports = {
+  login,
+  logout,
+  refresh,
+
+  currentUser,
+
   createAd,
   updateAdData,
   getAllAds,
@@ -17,9 +23,6 @@ module.exports = {
   getAllAgents,
   getAgentById,
   deleteAgent,
-
-  login,
-  currentUser,
 
   createCustomer,
   updateCustomerData,

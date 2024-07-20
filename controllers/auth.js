@@ -1,5 +1,5 @@
 const { UserModel } = require('../models');
-const { getExistsDoc, updateDocByID, createToken } = require('../services');
+const { getExistsDoc, updateDocByID, createToken, verifyToken } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 const { userRolesEnum } = require('../constants');
 
@@ -24,17 +24,44 @@ const login = async (req, res) => {
   const refToken = createToken(userId, KEY_REFRESH_TOKEN, '9h');
 
   // Update user data by adding accessToken & refreshToken
-  const { name, phone, accessToken, refreshToken } = await updateDocByID(UserModel, userId, { accessToken: accToken, refreshToken: refToken });
+  const { accessToken, refreshToken } = await updateDocByID(UserModel, userId, { accessToken: accToken, refreshToken: refToken });
 
   res.status(200).json({
-    user: { name, phone, role },
-    tokens: {
-      accessToken,
-      refreshToken,
-    },
+    accessToken,
+    refreshToken,
+  });
+};
+
+const logout = async (req, res) => {
+  const { userId } = req.user;
+
+  await updateDocByID(UserModel, userId, { accessToken: '', refreshToken: '' });
+
+  res.status(200).json({ message: 'Logout successful' });
+};
+
+const refresh = async (req, res) => {
+  const { refreshToken: token } = req.body;
+
+  const isTokenExists = await getExistsDoc(UserModel, { refreshToken: token });
+  if (!isTokenExists) throw httpError(403, 'Refresh token does not valid');
+
+  // create tokens
+  const { payload: userId } = verifyToken(token, KEY_REFRESH_TOKEN);
+  const accToken = createToken(userId, KEY_ACCESS_TOKEN, '1h');
+  const refToken = createToken(userId, KEY_REFRESH_TOKEN, '9h');
+
+  // update user data with new tokens
+  const { accessToken, refreshToken } = await updateDocByID(UserModel, userId, { accessToken: accToken, refreshToken: refToken });
+
+  res.status(200).json({
+    accessToken,
+    refreshToken,
   });
 };
 
 module.exports = {
   login: ctrlWrapper(login),
+  logout: ctrlWrapper(logout),
+  refresh: ctrlWrapper(refresh),
 };
