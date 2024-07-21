@@ -1,10 +1,14 @@
 const { ShowModel } = require('../models');
 const { getExistsDoc, getAllDocs, updateDocByID, getDocByID } = require('../services');
 const { ctrlWrapper, httpError } = require('../utils');
+const { userRolesEnum } = require('../constants');
 
 // Create new show
 const createShow = async (req, res) => {
   const { name } = req.body;
+  const { role } = req.user;
+
+  if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isShowExist = await getExistsDoc(ShowModel, { name });
 
@@ -19,6 +23,9 @@ const createShow = async (req, res) => {
 const updateShowData = async (req, res) => {
   const { showId } = req.params;
   const { name } = req.body;
+  const { role } = req.user;
+
+  if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isShowExist = await getExistsDoc(ShowModel, { name });
 
@@ -54,6 +61,9 @@ const getShowByID = async (req, res) => {
 // Delete show
 const deleteShow = async (req, res) => {
   const { showId } = req.params;
+  const { role } = req.user;
+
+  if (role !== userRolesEnum.CHIEF) throw httpError(403, 'Role "middle" and "senior" does not have rights to this action.');
 
   const isShowExist = await getDocByID(ShowModel, showId);
 

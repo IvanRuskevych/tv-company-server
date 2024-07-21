@@ -1,10 +1,14 @@
 const { AgentModel } = require('../models');
 const { getExistsDoc, updateDocByID, getAllDocs, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
+const { userRolesEnum } = require('../constants');
 
 // Create new agent
 const createAgent = async (req, res) => {
   const { name, commission } = req.body;
+  const { role } = req.user;
+
+  if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isAgentExist = await getExistsDoc(AgentModel, { name });
 
@@ -19,6 +23,9 @@ const createAgent = async (req, res) => {
 const updateAgentData = async (req, res) => {
   const { agentId } = req.params;
   const { name } = req.body;
+  const { role } = req.user;
+
+  if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isAgentExist = await getExistsDoc(AgentModel, { name });
 
@@ -54,9 +61,9 @@ const getAgentById = async (req, res) => {
 // Delete agent
 const deleteAgent = async (req, res) => {
   const { agentId } = req.params;
-  const result = req.user;
+  const { role } = req.user;
 
-  console.log('result', result);
+  if (role !== userRolesEnum.CHIEF) throw httpError(403, 'Role "middle" and "senior" does not have rights to this action.');
 
   const isAgentExist = await AgentModel.findById(agentId);
 
