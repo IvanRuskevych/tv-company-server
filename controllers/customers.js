@@ -1,10 +1,14 @@
 const { CustomerModel } = require('../models');
 const { getExistsDoc, getAllDocs, updateDocByID, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
+const { userRolesEnum } = require('../constants');
 
 // Create new customer
 const createCustomer = async (req, res) => {
   const { name } = req.body;
+  const { role } = req.user;
+
+  if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isCustomerExist = await getExistsDoc(CustomerModel, { name });
 
@@ -19,6 +23,9 @@ const createCustomer = async (req, res) => {
 const updateCustomerData = async (req, res) => {
   const { customerId } = req.params;
   const { name } = req.body;
+  const { role } = req.user;
+
+  if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isCustomerExist = await getExistsDoc(CustomerModel, { name });
 
@@ -54,6 +61,9 @@ const getCustomerById = async (req, res) => {
 // Delete customer
 const deleteCustomer = async (req, res) => {
   const { customerId } = req.params;
+  const { role } = req.user;
+
+  if (role !== userRolesEnum.CHIEF) throw httpError(403, 'Role "middle" and "senior" does not have rights to this action.');
 
   const isCustomerExist = await CustomerModel.findById(customerId);
 
