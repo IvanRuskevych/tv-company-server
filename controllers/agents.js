@@ -1,4 +1,4 @@
-const { AgentModel, ShowModel } = require('../models');
+const { AgentModel } = require('../models');
 const { getExistsDoc, updateDocByID, getAllDocs, getDocByID } = require('../services');
 const { httpError, ctrlWrapper } = require('../utils');
 
@@ -54,6 +54,9 @@ const getAgentById = async (req, res) => {
 // Delete agent
 const deleteAgent = async (req, res) => {
   const { agentId } = req.params;
+  const result = req.user;
+
+  console.log('result', result);
 
   const isAgentExist = await AgentModel.findById(agentId);
 
