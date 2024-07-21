@@ -9,11 +9,12 @@ const login = async (req, res) => {
   const { employeeID, password } = req.body;
 
   // find user by employeeID & password
-  const { _id: userId, role } = await getExistsDoc(UserModel, { employeeID, password });
+  const isUserExists = await getExistsDoc(UserModel, { employeeID, password });
 
-  if (!userId) {
+  if (!isUserExists) {
     throw httpError(401, 'Employee ID or password is wrong');
   }
+  const { _id: userId, role } = isUserExists;
 
   if (role === userRolesEnum.JUNIOR) {
     throw httpError(403, 'You have no access rights');
