@@ -8,7 +8,7 @@ dotenv.config({
   path: process.env.NODE_ENV === 'production' ? './environments/production.env' : './environments/.env',
 });
 
-const { authRouter, showsRouter, customersRouter, agentsRouter, adsRouter, usersRouter } = require('./routes');
+const { authRouter, showsRouter, customersRouter, agentsRouter, commercialsRouter, usersRouter } = require('./routes');
 const swaggerDoc = require('./swagger.json');
 
 const app = express();
@@ -27,7 +27,7 @@ app.use('/users', usersRouter);
 app.use('/shows', showsRouter);
 app.use('/customers', customersRouter);
 app.use('/agents', agentsRouter);
-app.use('/ads', adsRouter);
+app.use('/commercials', commercialsRouter);
 
 // Error settings
 app.use((req, res) => {

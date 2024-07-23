@@ -28,8 +28,9 @@ const updateAgentData = async (req, res) => {
   if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isAgentExist = await getExistsDoc(AgentModel, { name });
+  const isDifferentAgent = !!isAgentExist && isAgentExist._id.toString() !== agentId;
 
-  if (isAgentExist) throw httpError(409, 'Agent already exists.');
+  if (isDifferentAgent) throw httpError(409, 'Agent already exists.');
 
   const updatedAgent = await updateDocByID(AgentModel, agentId, req.body);
 

@@ -29,7 +29,8 @@ const updateShowData = async (req, res) => {
 
   const isShowExist = await getExistsDoc(ShowModel, { name });
 
-  if (isShowExist) throw httpError(409, 'Show already exists.');
+  const isDifferentShow = !!isShowExist && isShowExist._id.toString() !== showId;
+  if (isDifferentShow) throw httpError(409, 'Show already exists.');
 
   const updatedShowData = await updateDocByID(ShowModel, showId, req.body);
 

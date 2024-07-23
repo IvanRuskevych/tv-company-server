@@ -2,12 +2,12 @@ const { UserModel } = require('./userModel');
 const { ShowModel } = require('./showModel');
 const { CustomerModel } = require('./customerModel');
 const { AgentModel } = require('./agentModel');
-const { AdModel } = require('./adModel');
+const { CommercialModel } = require('./commercialModel');
 
 module.exports = {
   UserModel,
   ShowModel,
   CustomerModel,
   AgentModel,
-  AdModel,
+  CommercialModel,
 };

@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const { handleMongooseError } = require('../utils');
 
-const adSchema = new Schema(
+const commercialSchema = new Schema(
   {
     name: { type: String, required: true },
     show: {
@@ -21,8 +21,14 @@ const adSchema = new Schema(
       required: true,
     },
     date: {
-      type: Date,
-      required: true,
+      start: {
+        type: Date,
+        required: true,
+      },
+      end: {
+        type: Date,
+        required: true,
+      },
     },
     duration: {
       type: Number,
@@ -35,8 +41,8 @@ const adSchema = new Schema(
   },
 );
 
-adSchema.post('save', handleMongooseError);
+commercialSchema.post('save', handleMongooseError);
 
-const AdModel = model('Ads', adSchema);
+const CommercialModel = model('Commercials', commercialSchema);
 
-module.exports = { AdModel };
+module.exports = { CommercialModel };
