@@ -1,11 +1,11 @@
 const Joi = require('joi').extend(require('@joi/date'));
 Joi.objectId = require('joi-objectid')(Joi);
 
-module.exports.adSchema = Joi.object().keys({
+module.exports.commercialSchema = Joi.object().keys({
   name: Joi.string().required().messages({
-    'any.required': 'Advertisement name is required.',
-    'string.base': 'Advertisement name must be a string.',
-    'string.empty': "Field 'Advertisement name' cannot be empty.",
+    'any.required': 'Commercial name is required.',
+    'string.base': 'Commercial name must be a string.',
+    'string.empty': "Field 'Commercial name' cannot be empty.",
   }),
   show: Joi.objectId().required().messages({
     'any.required': 'Show ID is required.',
@@ -17,18 +17,22 @@ module.exports.adSchema = Joi.object().keys({
     'any.required': 'Customer ID is required.',
     'string.base': 'Customer ID must be a string.',
     'string.empty': "Field 'Customer ID' cannot be empty.",
-    // '/objectId/': 'Customer ID must be a valid ObjectId.',
   }),
   agent: Joi.objectId().required().messages({
     'any.required': 'Agent ID is required.',
     'string.base': 'Agent ID must be a string.',
     'string.empty': "Field 'Agent ID' cannot be empty.",
-    // '/objectId/': 'Agent ID must be a valid ObjectId.',
   }),
-  date: Joi.date().format('YYYY-MM-DD').utc().messages({
-    'date.format': 'Date must be in the format YYYY-MM-DD.',
-    'date.base': 'Date must be a valid date.',
-  }),
+  date: Joi.object({
+    start: Joi.date().required().messages({
+      'date.base': 'Start date must be a valid date.',
+      'any.required': 'Start date is required.',
+    }),
+    end: Joi.date().required().messages({
+      'date.base': 'End date must be a valid date.',
+      'any.required': 'End date is required.',
+    }),
+  }).required(),
   duration: Joi.number().required().messages({
     'any.required': 'Duration is required.',
     'number.base': 'Duration must be a number.',

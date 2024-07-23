@@ -28,8 +28,9 @@ const updateCustomerData = async (req, res) => {
   if (role === userRolesEnum.MIDDLE) throw httpError(403, 'Role "middle" does not have rights to this action.');
 
   const isCustomerExist = await getExistsDoc(CustomerModel, { name });
+  const isDifferentCustomer = !!isCustomerExist && isCustomerExist._id.toString() !== customerId;
 
-  if (isCustomerExist) throw httpError(409, 'Customer already exists.');
+  if (isDifferentCustomer) throw httpError(409, 'Customer already exists.');
 
   const updatedCustomer = await updateDocByID(CustomerModel, customerId, req.body);
 

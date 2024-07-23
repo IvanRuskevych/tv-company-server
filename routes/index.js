@@ -3,7 +3,7 @@ const usersRouter = require('./users');
 const showsRouter = require('./shows');
 const customersRouter = require('./customers');
 const agentsRouter = require('./agents');
-const adsRouter = require('./ads');
+const commercialsRouter = require('./commercials');
 
 module.exports = {
   authRouter,
@@ -11,5 +11,5 @@ module.exports = {
   showsRouter,
   customersRouter,
   agentsRouter,
-  adsRouter,
+  commercialsRouter,
 };
